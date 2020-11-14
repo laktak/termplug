@@ -9,4 +9,35 @@ TermPlug is a native app that runs on top (in front of) the terminal and can pre
 
 ## Installation
 
-TODO
+### TermPlug.app
+
+Open the `macos` folder in Terminal and run `./build-dist` to build the app and `./install` to copy it to `/Applications`
+
+### Bash
+
+Copy `bash/termplug` to `~/.local/bin/termplug`.
+
+```
+mkdir -p ~/.local/bin
+cp bash/termplug ~/.local/bin/termplug
+```
+
+If `~/.local/bin` is not in your path add
+
+```
+export PATH=$PATH:~/.local/bin
+```
+
+to your `~/.bashrc`.
+
+### Ranger
+
+Copy the `ranger/commands.py` and the `ranger/plugins/` directory to `~/.config/ranger`.
+
+If you already have a `~/.config/ranger/commands.py` file you can add the imports and the two functions to it.
+
+In `~/.config/ranger/rc.conf` map a key (like `\`) to toggle termplug:
+
+```
+map \ toggle_termplug
+```
