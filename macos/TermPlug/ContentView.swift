@@ -30,36 +30,39 @@ struct ContentView: View {
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
             }
         }.onReceive(openFile) { notification in
+            viewFile(object: notification.object)
+        }
+    }
 
-            if playVid {
-                playerView.player.pause()
-            }
-            showAny = false
-            playVid = false
-            image = nil
+    func viewFile(object: Any?) {
+        if playVid {
+            playerView.player.pause()
+        }
+        showAny = false
+        playVid = false
+        image = nil
 
-            if let url = notification.object as? URL {
-                if videoExtensions.contains(url.pathExtension.lowercased()) {
-                    playVid = true
-                    playerView.player.replaceCurrentItem(with: AVPlayerItem(url: url))
-                    playerView.player.play()
-                } else if imageExtensions.contains(url.pathExtension.lowercased()) {
-                    image = NSImage(contentsOf: url)
-                } else {
-                    if anyView == nil {
-                        anyView = AnyView()
-                    }
-                    showAny = true
-                    anyView!.ql.previewItem = AnyPreviewItem(file: url, title: url.lastPathComponent)
+        if let url = object as? URL {
+            if videoExtensions.contains(url.pathExtension.lowercased()) {
+                playVid = true
+                playerView.player.replaceCurrentItem(with: AVPlayerItem(url: url))
+                playerView.player.play()
+            } else if imageExtensions.contains(url.pathExtension.lowercased()) {
+                image = NSImage(contentsOf: url)
+            } else {
+                if anyView == nil {
+                    anyView = AnyView()
                 }
+                showAny = true
+                anyView!.ql.previewItem = AnyPreviewItem(file: url, title: url.lastPathComponent)
             }
+        }
 
-            if !showAny, anyView != nil {
-                // if we don't close the view it will crash with
-                // internalState != QLPreviewDeactivatedInternalState
-                anyView!.ql.close()
-                anyView = nil
-            }
+        if !showAny, anyView != nil {
+            // if we don't close the view it will crash with
+            // internalState != QLPreviewDeactivatedInternalState
+            anyView!.ql.close()
+            anyView = nil
         }
     }
 }
